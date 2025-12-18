@@ -1,0 +1,44 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Conda/Miniconda
+.conda/
+envs/
+miniconda*/
+.conda_envs/
+conda-meta/
+*.conda
+
+# PyCharm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other
+*.swp
+*.bak
+*.tmp
+*.temp

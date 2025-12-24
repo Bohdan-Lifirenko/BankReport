@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Error - Company Not Found{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 40px 0;">
+    <div style="font-size: 80px; margin-bottom: 20px;">❌</div>
+    <h2 style="color: #c33; margin-bottom: 20px;">Company Not Found</h2>
+    <p style="color: #666; font-size: 1.2em; margin-bottom: 30px;">{{ error_message }}</p>
+
+    <a href="/" class="btn btn-primary">← Back to Search</a>
+</div>
+{% endblock %}

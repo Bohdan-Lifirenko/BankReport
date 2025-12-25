@@ -1,25 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}{{ company.name }} - Company Information{% endblock %}
+{% block title %}{{ company.name }} - Інформація про компанію{% endblock %}
 
 {% block content %}
 <div class="company-details">
     <div class="text-center mb-4">
-        <a href="/" class="btn btn-secondary">← Back to Search</a>
+        <a href="/" class="btn btn-secondary">← Назад до пошуку</a>
     </div>
-
-    <div class="text-white text-center p-4 rounded-3 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-        <h2 class="fw-bold mb-2">{{ company.name }}</h2>
-        <p class="fs-5 mb-0 opacity-75">Tax ID (EDRPOU): {{ tax_id }}</p>
-    </div>
-
-    <h3 class="text-dark mb-3">📊 Company Information</h3>
+    <h3 class="text-dark mb-3">📊 Інформація про компанію</h3>
 
     <div class="row g-3 mb-4">
         <div class="col-md-6 col-lg-4">
             <div class="card bg-light border-0 h-100 info-card">
                 <div class="card-body">
-                    <div class="info-label mb-1">🏷️ Tax ID (ЄДРПОУ)</div>
+                    <div class="info-label mb-1">🏷️ Податковий код компанії (ЄДРПОУ)</div>
                     <div class="fs-5 text-dark">{{ company.tax_id }}</div>
                 </div>
             </div>
@@ -28,7 +22,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card bg-light border-0 h-100 info-card">
                 <div class="card-body">
-                    <div class="info-label mb-1">🏢 Company Name</div>
+                    <div class="info-label mb-1">🏢 Повна офіційна назва компанії</div>
                     <div class="fs-5 text-dark">{{ company.name }}</div>
                 </div>
             </div>
@@ -37,7 +31,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card bg-light border-0 h-100 info-card">
                 <div class="card-body">
-                    <div class="info-label mb-1">📈 KVED Code</div>
+                    <div class="info-label mb-1">📈 Основний вид економічної діяльності компанії (КВЕД)</div>
                     <div class="fs-5 text-dark">{{ company.kved }}</div>
                 </div>
             </div>
@@ -46,7 +40,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card bg-light border-0 h-100 info-card">
                 <div class="card-body">
-                    <div class="info-label mb-1">📋 OPF Code</div>
+                    <div class="info-label mb-1">📋 Код організаційно-правової форми компанії</div>
                     <div class="fs-5 text-dark">{{ company.opf_code }}</div>
                 </div>
             </div>
@@ -55,7 +49,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card bg-light border-0 h-100 info-card">
                 <div class="card-body">
-                    <div class="info-label mb-1">📍 KATOTTG Code</div>
+                    <div class="info-label mb-1">📍 Код КАТОТТГ</div>
                     <div class="fs-5 text-dark">{{ company.katottg }}</div>
                 </div>
             </div>
@@ -64,7 +58,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card bg-light border-0 h-100 info-card">
                 <div class="card-body">
-                    <div class="info-label mb-1">🗺️ Region Code</div>
+                    <div class="info-label mb-1">🗺️ Код регіону (області)</div>
                     <div class="fs-5 text-dark">{{ company.region_code }}</div>
                 </div>
             </div>
@@ -73,7 +67,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card bg-light border-0 h-100 info-card">
                 <div class="card-body">
-                    <div class="info-label mb-1">🏘️ Local Code</div>
+                    <div class="info-label mb-1">🏘️ Код місцевого адміністративного рівня</div>
                     <div class="fs-5 text-dark">{{ company.local_code }}</div>
                 </div>
             </div>
@@ -83,14 +77,14 @@
     <!-- Balance Waterfall Chart Section -->
     <div class="card mb-4">
         <div class="card-header bg-white">
-            <h4 class="mb-0">📈 Balance Sheet Waterfall Chart</h4>
+            <h4 class="mb-0">📈 Графік балансу (Waterfall)</h4>
         </div>
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="dateSelect" class="form-label fw-bold">Select Reporting Date:</label>
+                    <label for="dateSelect" class="form-label fw-bold">Виберіть дату звітності:</label>
                     <select id="dateSelect" class="form-select">
-                        <option value="">-- Select a date --</option>
+                        <option value="">-- Виберіть дату --</option>
                         {% for date in available_dates %}
                         <option value="{{ date }}">{{ date }}</option>
                         {% endfor %}
@@ -99,25 +93,10 @@
             </div>
             <div id="balanceChart" style="width: 100%; height: 400px;">
                 <div class="text-center text-muted py-5">
-                    <p>Select a date to view the balance waterfall chart</p>
+                    <p>Виберіть дату, щоб переглянути графік</p>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="alert alert-success border-start border-success border-4">
-        <h5 class="text-success mb-2">ℹ️ Field Descriptions</h5>
-        <ul class="text-muted mb-0" style="line-height: 1.8;">
-            <li><strong>KVED:</strong> Main economic activity code (КВЕД) - used for industry classification</li>
-            <li><strong>OPF Code:</strong> Legal form code (Організаційно-правова форма)</li>
-            <li><strong>KATOTTG:</strong> Administrative-territorial unit code where the company is registered</li>
-            <li><strong>Region Code:</strong> Oblast (region) code</li>
-            <li><strong>Local Code:</strong> Local administrative level code (community/district)</li>
-        </ul>
-    </div>
-
-    <div class="text-center mt-4">
-        <a href="/api/company/{{ tax_id }}" class="btn btn-primary" target="_blank">📄 View JSON Data</a>
     </div>
 </div>
 

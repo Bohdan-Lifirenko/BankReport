@@ -32,6 +32,20 @@ class DataPreparer:
             return self._clean_data(company_data.to_dict(), default_value=self.DEFAULT_MISSING_VALUE)
         return None
 
+    def get_revenue_data(self, tax_id: str) -> List[Dict]:
+        revenue_df = self.financial_service.get_revenue_data(tax_id)[['my_date', 'value']].copy()
+
+        # Sort by date ascending for proper chart display
+        revenue_df = revenue_df.sort_values('my_date')
+
+        # Convert Timestamp to ISO format string for JSON serialization
+        revenue_df['my_date'] = revenue_df['my_date'].dt.strftime('%Y-%m-%d')
+
+        # Convert to list of dictionaries
+        result = revenue_df.to_dict('records')
+
+        return result
+
     def _clean_data(self, data: dict[str, Any], default_value: str = "") -> dict[str, Any]:
         """
         Clean dictionary values by replacing missing values.

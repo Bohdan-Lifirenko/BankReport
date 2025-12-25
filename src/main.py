@@ -1,3 +1,5 @@
+import json
+import sys
 import traceback
 from pathlib import Path
 
@@ -15,18 +17,22 @@ data_preparer = None
 def initialize_services():
     global financial_service, data_preparer
     try:
+        data_dir = Path(__file__).resolve().parent.parent / "data"
+        print(f"Loading data from {data_dir}")
+        firms_path = data_dir / "firms.csv"
+        fin_values_path = data_dir / "fin_values.csv"
+
         financial_service = FinancialService(
-            "C:\\Users\\Robot_03\\Documents\\BankReport\\data\\firms.csv",
-            "C:\\Users\\Robot_03\\Documents\\BankReport\\data\\fin_values.csv"
+            firms_path,
+            fin_values_path
         )
-        print(financial_service.get_company_data(company_id="00236903"))
-        print(financial_service.get_balance_data("00236903", "2021-12-31"))
 
         data_preparer = DataPreparer(financial_service)
 
     except Exception as e:
         print(f"Error initializing services: {e}")
         traceback.print_exc()
+        sys.exit(1)
 
 
 initialize_services()
@@ -50,12 +56,17 @@ def search():
         return render_template('index.html',
                              error=f"Company with tax ID {tax_id} not found")
 
+    # Get revenue data for the chart
+    revenue_data = data_preparer.get_revenue_data(tax_id)
+    revenue_json = json.dumps(revenue_data) if revenue_data else "[]"
+
     # Get available dates for financial data
     available_dates = financial_service.get_available_dates(tax_id)
 
     return render_template('company.html',
                           company=company_data,
                           tax_id=tax_id,
+                          revenue_data=revenue_json,
                           available_dates=available_dates)
 
 @app.route('/company/<tax_id>')

@@ -1,47 +1,16 @@
-import logging
 import os
-from typing import Optional
-
 import pandas as pd
-
-# Configure logger for this module
-logger = logging.getLogger(__name__)
+from pandas import DataFrame
 
 
 class DataLoader:
-    def __init__(self):
-        self.companies_info_df: Optional[pd.DataFrame] = None
-        self._is_loaded: bool = False
-        logger.info("DataLoader instance created")
 
-    def load_data(self, companies_info_path: str) -> None:
-        """
-        Load CSV data files into memory with proper dtype handling.
-        """
-        try:
-            self._load_companies_info_data(companies_info_path)
-
-            self._is_loaded = True
-            logger.info("Data loading completed successfully")
-
-        except FileNotFoundError as e:
-            logger.exception("File not found error during data loading")
-            raise
-        except ValueError as e:
-            logger.exception("Data validation error during data loading")
-            raise
-        except Exception as e:
-            logger.exception("Unexpected error during data loading")
-            raise
-
-    def _load_companies_info_data(self, companies_info_path: str) -> None:
+    @staticmethod
+    def load_companies_info_data(companies_info_path: str) -> DataFrame:
         if not os.path.exists(companies_info_path):
-            logger.error(f"Companies info file not found: {companies_info_path}")
             raise FileNotFoundError(f"Companies info file not found: {companies_info_path}")
 
-        # Load firms.csv
-        logger.info(f"Loading firms data from: {companies_info_path}")
-        self.firms_df = pd.read_csv(
+        companies_info_df = pd.read_csv(
             companies_info_path,
             dtype={
                 'tax_id': str,
@@ -57,45 +26,49 @@ class DataLoader:
         # Validate firms columns
         required_firms_cols = ['tax_id', 'name', 'kved', 'opf_code',
                                'katottg', 'region_code', 'local_code']
-        missing_cols = set(required_firms_cols) - set(self.firms_df.columns)
+        missing_cols = set(required_firms_cols) - set(companies_info_df.columns)
         if missing_cols:
-            logger.error(f"Missing required columns in firms.csv: {missing_cols}")
             raise ValueError(f"Missing required columns in firms.csv: {missing_cols}")
 
-        logger.debug("Stripping whitespace from firms data columns")
         # Strip whitespace for consistent lookups
-        self.firms_df['tax_id'] = self.firms_df['tax_id'].str.strip()
-        self.firms_df['name'] = self.firms_df['name'].str.strip()
-        self.firms_df['kved'] = self.firms_df['kved'].str.strip()
-        self.firms_df['opf_code'] = self.firms_df['opf_code'].str.strip()
-        self.firms_df['katottg'] = self.firms_df['katottg'].str.strip()
-        self.firms_df['region_code'] = self.firms_df['region_code'].str.strip()
-        self.firms_df['local_code'] = self.firms_df['local_code'].str.strip()
+        companies_info_df['tax_id'] = companies_info_df['tax_id'].str.strip()
+        companies_info_df['name'] = companies_info_df['name'].str.strip()
+        companies_info_df['kved'] = companies_info_df['kved'].str.strip()
+        companies_info_df['opf_code'] = companies_info_df['opf_code'].str.strip()
+        companies_info_df['katottg'] = companies_info_df['katottg'].str.strip()
+        companies_info_df['region_code'] = companies_info_df['region_code'].str.strip()
+        companies_info_df['local_code'] = companies_info_df['local_code'].str.strip()
 
-        logger.info(f"Successfully loaded {len(self.firms_df)} companies")
+        return companies_info_df
 
+    @staticmethod
+    def load_fin_records_data(fin_records: str) -> DataFrame:
+        if not os.path.exists(fin_records):
+            raise FileNotFoundError(f"Financial values file not found: {fin_records}")
 
+        fin_records_df = pd.read_csv(
+            fin_records,
+            dtype={
+                'tax_id': str,
+                'code': int,
+                'value': float,
+                'c_doc_sub': str
+            },
+            parse_dates=['my_date']  # Parse date column automatically
+        )
 
-    def is_loaded(self) -> bool:
-        """
-        Check if data has been loaded.
+        # Validate fin_values columns
+        required_fin_cols = ['tax_id', 'my_date', 'code', 'value', 'c_doc_sub']
+        missing_cols = set(required_fin_cols) - set(fin_records_df.columns)
+        if missing_cols:
+            raise ValueError(f"Missing required columns in fin_values.csv: {missing_cols}")
 
-        Returns:
-            True if data is loaded, False otherwise
-        """
-        is_loaded = self._is_loaded and self.firms_df is not None
-        logger.debug(f"Data loaded status: {is_loaded}")
-        return is_loaded
+        # Strip whitespace from tax_id for consistent lookups
+        fin_records_df['tax_id'] = fin_records_df['tax_id'].str.strip()
 
-    def get_company_data(self, company_id: str) -> Optional[pd.Series]:
-        if not self.is_loaded():
-            raise RuntimeError("Data not loaded. Call load_data() first.")
+        # Sort by date for better performance
+        fin_records_df = fin_records_df.sort_values(['tax_id', 'my_date'])
 
-        tax_id = str(company_id)
-        result = self.firms_df[self.firms_df['tax_id'] == tax_id]
+        return fin_records_df
 
-        if result.empty:
-            return None
-
-        return result.iloc[0]
 

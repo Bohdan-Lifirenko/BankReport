@@ -1,6 +1,6 @@
 # src/services/data_preparer.py
 import logging
-from typing import Any, Optional
+from typing import Any, Optional, List, Dict
 
 import pandas as pd
 
@@ -19,7 +19,7 @@ class DataPreparer:
         self.financial_service = financial_service
         logger.info("DataPreparer instance created")
 
-    def get_prepared_company_data(self, company_id: str) -> Optional[dict[str, Any]]:
+    def get_company_data(self, company_id: str) -> Optional[dict[str, Any]]:
         """
         Get company data with cleaned/sanitized values for frontend.
         Replaces NaN, None, and empty strings with a default value.

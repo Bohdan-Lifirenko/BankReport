@@ -50,7 +50,31 @@ def search():
         return render_template('index.html',
                              error=f"Company with tax ID {tax_id} not found")
 
-    return render_template('company.html', company=company_data, tax_id=tax_id)
+    # Get available dates for financial data
+    available_dates = financial_service.get_available_dates(tax_id)
+
+    return render_template('company.html',
+                          company=company_data,
+                          tax_id=tax_id,
+                          available_dates=available_dates)
+
+@app.route('/company/<tax_id>')
+def company(tax_id):
+    """Display company details page"""
+    tax_id = tax_id.strip()
+    company_data = data_preparer.get_company_data(tax_id)
+
+    if company_data is None:
+        return render_template('error.html',
+                             error_message=f"Company with tax ID {tax_id} not found")
+
+    # Get available dates for financial data
+    available_dates = financial_service.get_available_dates(tax_id)
+
+    return render_template('company.html',
+                          company=company_data,
+                          tax_id=tax_id,
+                          available_dates=available_dates)
 
 @app.route('/api/company/<tax_id>')
 def api_company(tax_id):

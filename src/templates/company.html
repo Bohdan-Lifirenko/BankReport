@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block title %}{{ company.name }} - Company Information{% endblock %}
@@ -81,6 +80,31 @@
         </div>
     </div>
 
+    <!-- Balance Waterfall Chart Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <h4 class="mb-0">📈 Balance Sheet Waterfall Chart</h4>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="dateSelect" class="form-label fw-bold">Select Reporting Date:</label>
+                    <select id="dateSelect" class="form-select">
+                        <option value="">-- Select a date --</option>
+                        {% for date in available_dates %}
+                        <option value="{{ date }}">{{ date }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div id="balanceChart" style="width: 100%; height: 400px;">
+                <div class="text-center text-muted py-5">
+                    <p>Select a date to view the balance waterfall chart</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="alert alert-success border-start border-success border-4">
         <h5 class="text-success mb-2">ℹ️ Field Descriptions</h5>
         <ul class="text-muted mb-0" style="line-height: 1.8;">
@@ -96,4 +120,69 @@
         <a href="/api/company/{{ tax_id }}" class="btn btn-primary" target="_blank">📄 View JSON Data</a>
     </div>
 </div>
+
+<!-- Plotly JS -->
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script>
+    const taxId = "{{ tax_id }}";
+    const dateSelect = document.getElementById('dateSelect');
+    const chartDiv = document.getElementById('balanceChart');
+
+    dateSelect.addEventListener('change', function() {
+        const selectedDate = this.value;
+        if (!selectedDate) {
+            chartDiv.innerHTML = '<div class="text-center text-muted py-5"><p>Select a date to view the balance waterfall chart</p></div>';
+            return;
+        }
+
+        // Fetch balance data from API
+        fetch(`/api/balance/${taxId}?date=${selectedDate}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    chartDiv.innerHTML = `<div class="alert alert-warning">${data.message || data.error}</div>`;
+                    return;
+                }
+
+                // Create waterfall chart
+                const trace = {
+                    type: 'waterfall',
+                    orientation: 'v',
+                    x: ['Equity', 'Liabilities', 'Total Assets'],
+                    y: [data.equity, data.liabilities, 0],
+                    measure: ['absolute', 'relative', 'total'],
+                    text: [
+                        data.equity ? data.equity.toLocaleString() : 'N/A',
+                        data.liabilities ? data.liabilities.toLocaleString() : 'N/A',
+                        data.assets ? data.assets.toLocaleString() : 'N/A'
+                    ],
+                    textposition: 'outside',
+                    connector: {
+                        line: { color: 'rgb(63, 63, 63)' }
+                    },
+                    increasing: { marker: { color: '#28a745' } },
+                    decreasing: { marker: { color: '#dc3545' } },
+                    totals: { marker: { color: '#667eea' } }
+                };
+
+                const layout = {
+                    title: {
+                        text: `Balance Sheet Breakdown (${selectedDate})`,
+                        font: { size: 18 }
+                    },
+                    xaxis: { title: 'Components' },
+                    yaxis: { title: 'Value (thousands UAH)' },
+                    showlegend: false,
+                    margin: { t: 60, b: 60, l: 80, r: 40 }
+                };
+
+                const config = { responsive: true };
+
+                Plotly.newPlot(chartDiv, [trace], layout, config);
+            })
+            .catch(error => {
+                chartDiv.innerHTML = `<div class="alert alert-danger">Error loading data: ${error.message}</div>`;
+            });
+    });
+</script>
 {% endblock %}

@@ -47,6 +47,27 @@ class FinancialService:
             'date': date
         }
 
+    def get_available_dates(self, tax_id: str) -> List[str]:
+        """
+        Get all available financial reporting dates for a company.
+
+        Args:
+            tax_id: Company tax ID (EDRPOU)
+
+        Returns:
+            List of date strings in YYYY-MM-DD format, sorted descending
+        """
+        tax_id = str(tax_id).strip()
+        company_data = self.fin_records_df[self.fin_records_df['tax_id'] == tax_id]
+
+        if company_data.empty:
+            return []
+
+        # Get unique dates, convert to string format, and sort descending
+        dates = company_data['my_date'].dropna().unique()
+        date_strings = [pd.Timestamp(d).strftime('%Y-%m-%d') for d in dates]
+        return sorted(date_strings, reverse=True)
+
     def company_exists(self, tax_id: str) -> bool:
         tax_id = str(tax_id).strip()
 

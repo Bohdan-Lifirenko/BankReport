@@ -14,6 +14,8 @@ class DataPreparer:
     Prepares data for frontend consumption.
     Handles NaN, None, and empty string values.
     """
+    DEFAULT_MISSING_VALUE: str = "Відсутнє"
+
 
     def __init__(self, financial_service: FinancialService):
         self.financial_service = financial_service

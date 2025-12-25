@@ -1,50 +1,55 @@
+
 {% extends "base.html" %}
 
 {% block title %}Search Company - Company Information System{% endblock %}
 
 {% block content %}
 <div class="search-section">
-    <h2 style="margin-bottom: 20px; color: #333;">Search for a Company</h2>
+    <h2 class="mb-3 text-dark">Search for a Company</h2>
 
     {% if error %}
-    <div class="error">
-        ⚠️ {{ error }}
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <span class="me-2">⚠️</span> {{ error }}
     </div>
     {% endif %}
 
-    <form action="/search" method="get" class="search-form">
-        <input
-            type="text"
-            name="tax_id"
-            class="search-input"
-            placeholder="Enter company tax ID (EDRPOU), e.g., 00236903"
-            required
-            pattern="[0-9]{8}"
-            title="Tax ID must be 8 digits"
-        >
-        <button type="submit" class="btn btn-primary">🔍 Search</button>
+    <form action="/search" method="get" class="mb-4">
+        <div class="input-group input-group-lg">
+            <input
+                type="text"
+                name="tax_id"
+                class="form-control"
+                placeholder="Enter company tax ID (EDRPOU), e.g., 00236903"
+                required
+                pattern="[0-9]{8}"
+                title="Tax ID must be 8 digits"
+            >
+            <button type="submit" class="btn btn-primary">🔍 Search</button>
+        </div>
     </form>
 
-    <div style="margin-top: 30px; background: #f0f7ff; padding: 20px; border-radius: 8px;">
-        <h3 style="color: #667eea; margin-bottom: 15px;">💡 Quick Examples</h3>
-        <p style="color: #666; margin-bottom: 10px;">Try searching for these companies:</p>
-        <ul style="list-style: none; padding: 0;">
-            <li style="margin: 8px 0;">
-                <a href="/company/00236903" style="color: #667eea; text-decoration: none; font-weight: 500;">
-                    00236903 - АКЦІОНЕРНЕ ТОВАРИСТВО "ГОЛОВНИЙ ІНСТИТУТ..."
-                </a>
-            </li>
-            <li style="margin: 8px 0;">
-                <a href="/company/00292379" style="color: #667eea; text-decoration: none; font-weight: 500;">
-                    00292379 - ПРИВАТНЕ АКЦІОНЕРНЕ ТОВАРИСТВО "ЖЕЖЕЛІВСЬКИЙ КАР'ЄР"
-                </a>
-            </li>
-            <li style="margin: 8px 0;">
-                <a href="/company/00381152" style="color: #667eea; text-decoration: none; font-weight: 500;">
-                    00381152 - Приватне акціонерне товариство "Ічнянський молочно-консервний комбінат"
-                </a>
-            </li>
-        </ul>
+    <div class="card bg-light border-0">
+        <div class="card-body">
+            <h5 class="card-title" style="color: #667eea;">💡 Quick Examples</h5>
+            <p class="text-muted mb-2">Try searching for these companies:</p>
+            <ul class="list-unstyled mb-0">
+                <li class="py-1">
+                    <a href="/company/00236903" class="text-decoration-none fw-medium" style="color: #667eea;">
+                        00236903 - АКЦІОНЕРНЕ ТОВАРИСТВО "ГОЛОВНИЙ ІНСТИТУТ..."
+                    </a>
+                </li>
+                <li class="py-1">
+                    <a href="/company/00292379" class="text-decoration-none fw-medium" style="color: #667eea;">
+                        00292379 - ПРИВАТНЕ АКЦІОНЕРНЕ ТОВАРИСТВО "ЖЕЖЕЛІВСЬКИЙ КАР'ЄР"
+                    </a>
+                </li>
+                <li class="py-1">
+                    <a href="/company/00381152" class="text-decoration-none fw-medium" style="color: #667eea;">
+                        00381152 - Приватне акціонерне товариство "Ічнянський молочно-консервний комбінат"
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 {% endblock %}

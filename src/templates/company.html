@@ -1,60 +1,89 @@
+
 {% extends "base.html" %}
 
 {% block title %}{{ company.name }} - Company Information{% endblock %}
 
 {% block content %}
 <div class="company-details">
-    <div style="margin-bottom: 30px; text-align: center;">
+    <div class="text-center mb-4">
         <a href="/" class="btn btn-secondary">← Back to Search</a>
     </div>
 
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px; color: white; margin-bottom: 30px;">
-        <h2 style="margin-bottom: 10px; font-size: 1.8em;">{{ company.name }}</h2>
-        <p style="font-size: 1.2em; opacity: 0.9;">Tax ID (EDRPOU): {{ tax_id }}</p>
+    <div class="text-white text-center p-4 rounded-3 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <h2 class="fw-bold mb-2">{{ company.name }}</h2>
+        <p class="fs-5 mb-0 opacity-75">Tax ID (EDRPOU): {{ tax_id }}</p>
     </div>
 
-    <h3 style="color: #333; margin-bottom: 20px; font-size: 1.5em;">📊 Company Information</h3>
+    <h3 class="text-dark mb-3">📊 Company Information</h3>
 
-    <div class="info-grid">
-        <div class="info-card">
-            <div class="info-label">🏷️ Tax ID (ЄДРПОУ)</div>
-            <div class="info-value">{{ company.tax_id }}</div>
+    <div class="row g-3 mb-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-light border-0 h-100 info-card">
+                <div class="card-body">
+                    <div class="info-label mb-1">🏷️ Tax ID (ЄДРПОУ)</div>
+                    <div class="fs-5 text-dark">{{ company.tax_id }}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="info-card">
-            <div class="info-label">🏢 Company Name</div>
-            <div class="info-value">{{ company.name }}</div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-light border-0 h-100 info-card">
+                <div class="card-body">
+                    <div class="info-label mb-1">🏢 Company Name</div>
+                    <div class="fs-5 text-dark">{{ company.name }}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="info-card">
-            <div class="info-label">📈 KVED Code</div>
-            <div class="info-value">{{ company.kved }}</div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-light border-0 h-100 info-card">
+                <div class="card-body">
+                    <div class="info-label mb-1">📈 KVED Code</div>
+                    <div class="fs-5 text-dark">{{ company.kved }}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="info-card">
-            <div class="info-label">📋 OPF Code</div>
-            <div class="info-value">{{ company.opf_code }}</div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-light border-0 h-100 info-card">
+                <div class="card-body">
+                    <div class="info-label mb-1">📋 OPF Code</div>
+                    <div class="fs-5 text-dark">{{ company.opf_code }}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="info-card">
-            <div class="info-label">📍 KATOTTG Code</div>
-            <div class="info-value">{{ company.katottg }}</div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-light border-0 h-100 info-card">
+                <div class="card-body">
+                    <div class="info-label mb-1">📍 KATOTTG Code</div>
+                    <div class="fs-5 text-dark">{{ company.katottg }}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="info-card">
-            <div class="info-label">🗺️ Region Code</div>
-            <div class="info-value">{{ company.region_code }}</div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-light border-0 h-100 info-card">
+                <div class="card-body">
+                    <div class="info-label mb-1">🗺️ Region Code</div>
+                    <div class="fs-5 text-dark">{{ company.region_code }}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="info-card">
-            <div class="info-label">🏘️ Local Code</div>
-            <div class="info-value">{{ company.local_code }}</div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-light border-0 h-100 info-card">
+                <div class="card-body">
+                    <div class="info-label mb-1">🏘️ Local Code</div>
+                    <div class="fs-5 text-dark">{{ company.local_code }}</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #28a745;">
-        <h4 style="color: #28a745; margin-bottom: 10px;">ℹ️ Field Descriptions</h4>
-        <ul style="color: #666; line-height: 1.8;">
+    <div class="alert alert-success border-start border-success border-4">
+        <h5 class="text-success mb-2">ℹ️ Field Descriptions</h5>
+        <ul class="text-muted mb-0" style="line-height: 1.8;">
             <li><strong>KVED:</strong> Main economic activity code (КВЕД) - used for industry classification</li>
             <li><strong>OPF Code:</strong> Legal form code (Організаційно-правова форма)</li>
             <li><strong>KATOTTG:</strong> Administrative-territorial unit code where the company is registered</li>
@@ -63,7 +92,7 @@
         </ul>
     </div>
 
-    <div style="margin-top: 20px; text-align: center;">
+    <div class="text-center mt-4">
         <a href="/api/company/{{ tax_id }}" class="btn btn-primary" target="_blank">📄 View JSON Data</a>
     </div>
 </div>

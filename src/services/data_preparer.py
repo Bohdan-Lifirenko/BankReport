@@ -24,12 +24,11 @@ class DataPreparer:
         Get company data with cleaned/sanitized values for frontend.
         Replaces NaN, None, and empty strings with a default value.
         """
-        company_data = self.financial_service.get_company_data(company_id).to_dict()
+        company_data = self.financial_service.get_company_data(company_id)
 
-        if company_data is None:
-            return None
-
-        return self._clean_data(company_data)
+        if company_data is not None:
+            return self._clean_data(company_data.to_dict(), default_value=self.DEFAULT_MISSING_VALUE)
+        return None
 
     def _clean_data(self, data: dict[str, Any], default_value: str = "") -> dict[str, Any]:
         """

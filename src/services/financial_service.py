@@ -16,14 +16,9 @@ class FinancialService:
     CODE_EQUITY = 1495
 
     def get_company_data(self, company_id: str) -> Optional[pd.Series]:
-
-        tax_id = str(company_id)
-        result = self.companies_info_df[self.companies_info_df['tax_id'] == tax_id]
-
-        if result.empty:
-            return None
-
-        return result.iloc[0]
+        if self.company_exists(company_id):
+            return self.companies_info_df[self.companies_info_df['tax_id'] == company_id].iloc[0]
+        return None
 
     def get_balance_data(self, tax_id: str, date: str) -> Dict:
         assets_df = self._get_financial_data_by_code(tax_id, self.CODE_ASSETS)
